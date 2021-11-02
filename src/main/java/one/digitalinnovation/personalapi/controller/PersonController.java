@@ -1,5 +1,6 @@
 package one.digitalinnovation.personalapi.controller;
 
+import lombok.AllArgsConstructor;
 import one.digitalinnovation.personalapi.dto.request.PersonDTO;
 import one.digitalinnovation.personalapi.dto.response.MessageResponseDTO;
 import one.digitalinnovation.personalapi.exception.PersonNotFoundException;
@@ -13,14 +14,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/people")
+@AllArgsConstructor(onConstructor = @__(@Autowired)) //Cria o construtor padrão do autowired
 public class PersonController {
 
     private final PersonService personService; //Declarar o PersonRepository
 
-    @Autowired
+    //Esse construtor é criado automaticamente pela anotação do lombok @AllArgsConstructor(onConstructor = @__(@Autowired))
+   /* @Autowired
     public PersonController(PersonService personService){
         this.personService = personService;
-    }
+    }*/
 
     @PostMapping //Método post
     @ResponseStatus(HttpStatus.CREATED) //Spring

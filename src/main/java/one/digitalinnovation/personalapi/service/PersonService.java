@@ -1,5 +1,6 @@
 package one.digitalinnovation.personalapi.service;
 
+import lombok.AllArgsConstructor;
 import one.digitalinnovation.personalapi.dto.request.PersonDTO;
 import one.digitalinnovation.personalapi.dto.response.MessageResponseDTO;
 import one.digitalinnovation.personalapi.entity.Person;
@@ -14,16 +15,18 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service //Indica que essa classe será responsável por gerenciar as regras de negócio
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class PersonService {
 
     private final PersonRepository personRepository; //Declarar o PersonRepository
 
     private final PersonMapper personMapper = PersonMapper.INSTANCE;
 
-    @Autowired //Injeção de dependência da interface PersonRepository
+    //Esse construtor é criado automaticamente pela anotação do lombok @AllArgsConstructor(onConstructor = @__(@Autowired))
+    /*@Autowired //Injeção de dependência da interface PersonRepository
     public PersonService(PersonRepository personRepository){
         this.personRepository = personRepository;
-    }
+    }*/
 
     //Cria/cadastra uma pessoa
     public MessageResponseDTO createPerson(PersonDTO personDTO){ //Cria uma pessoa do tipo Persom
