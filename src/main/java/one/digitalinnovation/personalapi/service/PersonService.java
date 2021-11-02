@@ -8,7 +8,6 @@ import one.digitalinnovation.personalapi.mapper.PersonMapper;
 import one.digitalinnovation.personalapi.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,13 +25,11 @@ public class PersonService {
         this.personRepository = personRepository;
     }
 
+    //Cria/cadastra uma pessoa
     public MessageResponseDTO createPerson(PersonDTO personDTO){ //Cria uma pessoa do tipo Persom
         Person personToSave = personMapper.toModel(personDTO); //Ao invés de conveter manualmente criamos o PersonMapper
         Person savedPerson = personRepository.save(personToSave); //Salva a pessoa
-        return  MessageResponseDTO
-                .builder()
-                .message("Created person with ID" + savedPerson.getId())
-                .build();
+        return createMessageResponse(savedPerson.getId(), "Created person with ID");
     }
 
     public List<PersonDTO> listAll() {
@@ -66,9 +63,25 @@ public class PersonService {
         personRepository.deleteById(id);
     }
 
+    //Update pessoa
+    public MessageResponseDTO updateById(Long id, PersonDTO personDTO) throws PersonNotFoundException {
+        verifyIfExists(id); //Verifica se o id existe
+        Person personToUpdate = personMapper.toModel(personDTO); //Ao invés de conveter manualmente criamos o PersonMapper
+        Person updatedPerson = personRepository.save(personToUpdate); //Salva a pessoa
+        return createMessageResponse(updatedPerson.getId(), "Updated person with ID");
+    }
+
     //Verifica se o id existe (separamos esse método de verificação pois ele pode ser chamado por mais de um método)
     private void verifyIfExists(Long id) throws PersonNotFoundException {
         personRepository.findById(id)
-                .orElseThrow(() -> new PersonNotFoundException(id));
+                .orElseThrow(() -> new PersonNotFoundException(id)); //lança a exceção caso não exista o id
+    }
+
+    //Como esse código é usado em createPerson e updateById, separamos para otimizar o código
+    private MessageResponseDTO createMessageResponse(Long id, String message) {
+        return MessageResponseDTO
+                .builder()
+                .message(message + id)
+                .build();
     }
 }

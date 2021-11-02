@@ -39,6 +39,11 @@ public class PersonController {
         return personService.findById(id);
     }
 
+    @PutMapping("/{id}")//Método para atualizar por id
+    public MessageResponseDTO updateById (@PathVariable Long id, @RequestBody @Valid PersonDTO personDTO) throws PersonNotFoundException { //@PathVariable mapeia a requisição por id, @RequestBody passa o corpo da requisição
+        return personService.updateById(id, personDTO); //retorna id, objeto
+    }
+
     @DeleteMapping("/{id}") //Método para deleter por id
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) throws PersonNotFoundException { //trata exceção caso o id não exista
